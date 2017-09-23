@@ -16,3 +16,5 @@ The corresponding publication is
 
 [M. Rudolph, F. Ruiz, S. Athey, D. Blei, **Structured Embedding Models for Grouped Data**, 
 *Neural Information Processing Systems*, 2017](https://nips.cc/Conferences/2017/AcceptedPapersInitial)
+
+Note: rightnow the link above links to NIPS' list of accepted papers, but we will upload a pdf version of our paper soon.
