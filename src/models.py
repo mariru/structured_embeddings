@@ -176,7 +176,7 @@ class emb_model(object):
             variable_summaries('phi', self.phi)
             variable_summaries('rho', self.rho)
             variable_summaries('alpha', self.alpha)
-            for t in range(4):
+            for t in range(self.n_states):
                 variable_summaries(self.states[t]+'_rho',  
                           neural_network(self.rho, self.phi, self.K, t, self.H0, self.resnet))
                 variable_summaries(self.states[t]+'_diff', tf.abs(self.rho 
@@ -381,14 +381,6 @@ class hierarchical_bern_emb_model(emb_model):
                     dat[state + '_rho'] = self.geo_rho[state].eval()
             pickle.dump( dat, open( fname, "a+" ) )
 
-#def modulate(rho, phi, K, s, H0):
-#    phi_w_1 = tf.reshape(tf.slice(phi, [s, 0], [1, K*H0]), [K, H0])
-#    phi_w_2 = tf.reshape(tf.slice(phi, [s, K*H0], [1, K*H0]), [H0, K])
-#    phi_b_1 = tf.reshape(tf.slice(phi, [s, 2*K*H0], [1, H0]), [H0])
-#    phi_b_2 = tf.reshape(tf.slice(phi, [s, 2*K*H0+H0], [1, K]), [K])
-#    hidden = tf.tanh(tf.matmul(rho,phi_w_1) + phi_b_1)
-#    return tf.matmul(hidden, phi_w_2) + phi_b_2 + 0.001*tf.random_normal(rho.shape)
-
 def neural_network(rho, phi, K, s, H0, resnet):
     phi_w_1 = tf.reshape(tf.slice(phi, [s, 0], [1, K*H0]), [K, H0])
     phi_w_2 = tf.reshape(tf.slice(phi, [s, K*H0], [1, K*H0]), [H0, K])
@@ -405,10 +397,7 @@ class amortized_bern_emb_model(emb_model):
 
             with tf.name_scope('embeddings'):
                 self.alpha = tf.Variable(self.alpha_init, name='alpha', trainable=self.alpha_trainable)
-                #self.alpha = tf.Variable(self.alpha_init, name='alpha', trainable=True)
                 self.rho = tf.Variable(self.rho_init, name='rho', trainable=self.rho_trainable)
-                #print('HACKING!') 
-                #self.rho = tf.Variable(self.rho_init, name='rho', trainable=self.alpha_trainable)
 
                 trunc = np.sqrt(6)/np.sqrt(self.K + self.H0)
                 phi_init = np.random.uniform( -trunc, trunc, 
@@ -466,7 +455,6 @@ class amortized_bern_emb_model(emb_model):
                     ctx_alphas = tf.gather(self.alpha, ctx_idx)
 
                     rho_state = neural_network(self.rho, self.phi, self.K, t, self.H0, self.resnet)
-                    # TODO it would make more sense to gather first and modulate then!
                     p_rho = tf.squeeze(tf.gather(rho_state, p_idx))
                     n_rho = tf.gather(rho_state, n_idx)
 
@@ -484,6 +472,14 @@ class amortized_bern_emb_model(emb_model):
 
             self.loss = - (self.n_epochs * (self.ll_pos + self.ll_neg) + self.log_prior)
         self.init_eval_model()
+
+    def dump(self, fname):
+            with self.sess.as_default():
+                dat = {'alpha':  self.alpha.eval(),
+                       'rho': self.rho.eval()}
+                for state in self.states:
+                    dat[state + '_rho'] = self.geo_rho[state].eval()
+            pickle.dump( dat, open( fname, "a+" ) )
 
 
 def define_model(args, d, logdir):

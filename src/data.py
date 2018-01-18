@@ -48,8 +48,6 @@ class bern_emb_data():
         if self.hierarchical:
             self.batch = {}
             for t, i in enumerate(self.states):
-                print(i)
-                print(len([f for f in train_files if os.path.basename(f).split('_')[0] == i]))
                 self.batch[i] = self.batch_generator(self.n_train[t] + self.cs, 
                                     [f for f in train_files if os.path.basename(f).split('_')[0] == i])
         else:
