@@ -21,8 +21,8 @@ def parse_args():
         parser.add_argument('--cs', type=int, default=4,
                             help='Context size. Default is 4.')
 
-        parser.add_argument('--ns', type=int, default=100,
-                            help='Number of negative samples. Default is 100.')
+        parser.add_argument('--ns', type=int, default=10,
+                            help='Number of negative samples. Default is 10.')
 
         parser.add_argument('--hierarchical', type=bool, default=False,
                             help='hierarchical embedding model. Default is False.')
@@ -39,8 +39,8 @@ def parse_args():
         parser.add_argument('--init', type=str, default='',
                             help='Folder name to load variational.dat for initialization. Default is \'\' for no initialization')
 
-        parser.add_argument('--fpath', type=str, default='../dat/arxiv/',
-                            help='path to data (arxiv small)')
+        parser.add_argument('--fpath', type=str, default='../dat/lorem_ipsum/',
+                            help='path to data')
 
         args =  parser.parse_args()
         print(args)

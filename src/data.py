@@ -11,7 +11,7 @@ class bern_emb_data():
         self.ns = ns
         self.n_epochs = n_epochs
         self.hierarchical = hierarchical
-        dat_stats = pickle.load(open(os.path.join(fpath, "dat_stats.pkl"), "a+"))
+        dat_stats = pickle.load(open(os.path.join(fpath, "dat_stats.pkl"), "rb"))
         self.T = len(dat_stats['T_bins'])
         self.states = dat_stats['T_bins']
         self.name = dat_stats['name']
@@ -42,7 +42,6 @@ class bern_emb_data():
             self.unigram = self.unigram[self.w_idx]
         self.L = len(self.labels)
         self.dictionary = dict(zip(self.labels,range(self.L)))
-        #self.query_words = [w for w in dat_stats['query_words'] if w in self.labels]
 
         # data generator (training)
         train_files = glob.glob(os.path.join(fpath,'train','*.npy'))
@@ -51,12 +50,8 @@ class bern_emb_data():
             for t, i in enumerate(self.states):
                 print(i)
                 print(len([f for f in train_files if os.path.basename(f).split('_')[0] == i]))
-                if self.name == 'arxiv':
-                    self.batch[i] = self.batch_generator(self.n_train[t] + self.cs, 
+                self.batch[i] = self.batch_generator(self.n_train[t] + self.cs, 
                                     [f for f in train_files if os.path.basename(f).split('_')[0] == i])
-                else:
-                    self.batch[i] = self.batch_generator(self.n_train[t] + self.cs, 
-                                    [f for f in train_files if os.path.basename(f)[:dat_stats['prefix']] == i])
         else:
             self.batch = self.batch_generator(self.n_train.sum() + self.cs, train_files)
 
@@ -64,23 +59,15 @@ class bern_emb_data():
         test_files = glob.glob(os.path.join(fpath,'test','*.npy'))
         self.test_data = {}
         for state in self.states:
-            if self.name == 'arxiv':
-                self.test_data[state] = self.data_and_negative_samples(
+            self.test_data[state] = self.data_and_negative_samples(
                                         [f for f in test_files if os.path.basename(f).split('_')[0] == state])
-            else:
-                self.test_data[state] = self.data_and_negative_samples(
-                                        [f for f in test_files if os.path.basename(f)[:dat_stats['prefix']] == state])
 
         # data generator (valid)
         valid_files = glob.glob(os.path.join(fpath,'valid','*.npy'))
         self.valid_data = {}
         for state in self.states:
-            if self.name == 'arxiv':
-                self.valid_data[state] = self.data_and_negative_samples(
+            self.valid_data[state] = self.data_and_negative_samples(
                                          [f for f in valid_files if os.path.basename(f).split('_')[0] == state])
-            else:
-                self.valid_data[state] = self.data_and_negative_samples(
-                                         [f for f in valid_files if os.path.basename(f)[:dat_stats['prefix']] == state])
 
     def load_file(self, fn):
         with open(fn, 'r') as myfile:

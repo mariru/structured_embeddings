@@ -127,8 +127,7 @@ class emb_model(object):
                 rho_state = self.geo_rho[self.states[t]].eval()
             else:
                 rho_state = self.rho.eval()
-            else:
-                alpha_state = self.alpha.eval()
+            alpha_state = self.alpha.eval()
                 
         return self.sess.run(self.eval_ll, feed_dict = {self.eval_ph: words, 
                                               self.eval_n_idx: neg_words, 
