@@ -1,8 +1,6 @@
 # Structured Embeddings
 
-This repository contains code for analyzing how word usage differs across related groups of text data.
-
-The corresponding publication is
+This repository contains code for analyzing how word usage differs across related groups of text data. The corresponding publication is
 
 [M. Rudolph, F. Ruiz, S. Athey, D. Blei, **Structured Embedding Models for Grouped Data**, 
 *Neural Information Processing Systems*, 2017](https://papers.nips.cc/paper/6629-structured-embedding-models-for-grouped-data)
