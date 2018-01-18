@@ -8,7 +8,11 @@ import re
 # Change this to the name of the folder where your dataset is
 dataset_name = 'lorem_ipsum'
 # Change this to the number of words you want in the vocabulary
-V = 300
+V = 10000
+
+
+# No need to modify any code below
+#######################################################
 
 os.makedirs(dataset_name + '/train/')
 os.makedirs(dataset_name + '/valid/')

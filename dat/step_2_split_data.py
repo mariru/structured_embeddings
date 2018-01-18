@@ -6,6 +6,10 @@ import pandas as pd
 # Change this to the name of the folder where your dataset is
 dataset_name = 'lorem_ipsum'
 
+
+# No need to modify any code below
+#######################################################
+
 files = glob.glob(dataset_name+'/train/*.npy')
 
 df = pd.read_csv(dataset_name+'/unigram.txt', delimiter='\t',header=None)

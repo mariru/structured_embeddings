@@ -8,10 +8,16 @@ import tensorflow as tf
 # Change this to the name of the folder where your dataset is
 dataset_name = 'lorem_ipsum'
 
+# Change this to the maximal number of negative samples (per positive sample) you plan to use during training and evaluation. (Note: the negative samples drawn in this step will be used during evaluation)
+negative_samples = 20
+
+
+# No need to modify any code below
+#######################################################
 os.makedirs(dataset_name + '/valid/neg')
 os.makedirs(dataset_name + '/test/neg')
 
-def negative_samples(split, fpath='', ns = 20):
+def negative_samples(split, fpath='', ns = negative_samples):
     files = glob.glob(fpath + split + '/*.npy')
     dat_stats = pickle.load(open(os.path.join(fpath, "dat_stats.pkl"), "rb"))
     N = np.sum(dat_stats['train']).astype('int32')

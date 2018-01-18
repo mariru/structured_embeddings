@@ -22,7 +22,7 @@ def parse_args():
                             help='Context size. Default is 4.')
 
         parser.add_argument('--ns', type=int, default=10,
-                            help='Number of negative samples. Default is 10.')
+                            help='Number of negative samples. Default is 10. You will get a difficult to read tensorflow error if you use more negative samples than you generated in step 4 of the data preparation.')
 
         parser.add_argument('--hierarchical', type=bool, default=False,
                             help='hierarchical embedding model. Default is False.')
