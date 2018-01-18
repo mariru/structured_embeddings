@@ -1,7 +1,6 @@
-## Instructions for data preprocessing for structured Bernoulli embeddings.
+## Instructions for Data Preprocessing for Structured Embeddings
 
 Preprocess the data with 4 simple steps described below.
-
 Depending on how large your data is, you should set aside ca. 20 minutes for these preprocessing steps. 
 
 The goal of preprocessing is to truncate the vocabulary, remove all the words that are not in the vocabulary and then put the text into numpy arrays. Then we split the data into training validation and test set and compute statistics of the data that we need to use in the algorithm (e.g the number of words in each group, and the names of the groups).
@@ -104,35 +103,30 @@ In this step you will run the script `step_1_count_words.py`.
 The script counts distinct words and truncates the resulting vocabulary.
 Then each word is replaced whith its index in the vocabulary and the resulting numpy arrays are saved.
 
-#### 1.1 Modify step_1_count_words.py
-
 Go into this file and change `dataset_name` to the name of the folder in which the data is.
-It should be the subfolder unted `dat/` (as specified above your data is in `dat/[dataset_name]/raw/`).
-The current default dataset name `lorem_ipsum`.
-Also modify the vocabulary size you want to use a good size for English corpora is 'V = 10000'.
+It should be the subfolder under `dat/` (as specified above your data is in `dat/[dataset_name]/raw/`).
+The current default dataset name is `lorem_ipsum`.
+Also modify the vocabulary size you want to use a good size for English corpora is `V = 10000`.
 
-
-#### 1.3 Run step_1_count_words.py
 Assuming you are in `dat/` simply run 
 
 ```
    python step_1_count_words.py
 ```
 
-Tip: In this script data preprocesing is handled. Punctuation is removed, line-breaks are handled and everything is lower cased. Depending on your dataset, additional or differnt preprocessing steps might be required. We also recommend extracting bigrams and adding them to the vocabulary.
+Tip: In this script data preprocesing is handled. Punctuation is removed, line-breaks are handled and everything is lower cased. Depending on your dataset, additional or different preprocessing steps might be required. We also recommend extracting bigrams and adding them to the vocabulary.
 
 ### 2. Subsample the data and split into train test and validation split
 
-As in step 1.1 open the file `step_2_split_data.py` and change the data_set name.
-Then form `dat/` run
+Now open the file `step_2_split_data.py` and change the dataset name.
+Then from `dat/` run
 ```
     python step_2_split_data.py
 ```
 
 ### 3. Create data statistics.
 
-In this step, you simply have to run `step_3_create_data_stats.py`.
-Again, go into the file and change the `dataset_name`. 
+Now, open the file `step_3_create_data_stats.py` and change the `dataset_name`. 
 Then add the list of group names from step 0 under `states`
 (e.g. `states = [Group1, Group2, Group3, ..., GroupN]`).
 
