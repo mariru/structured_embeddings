@@ -476,6 +476,7 @@ class amortized_bern_emb_model(emb_model):
     def dump(self, fname):
             with self.sess.as_default():
                 dat = {'alpha':  self.alpha.eval(),
+                       'phi': self.phi.eval(),
                        'rho': self.rho.eval()}
                 for state in self.states:
                     dat[state + '_rho'] = self.geo_rho[state].eval()
