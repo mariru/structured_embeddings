@@ -48,8 +48,11 @@ class bern_emb_data():
         if self.hierarchical:
             self.batch = {}
             for t, i in enumerate(self.states):
+                state_files = [f for f in train_files if os.path.basename(f).split('_')[0] == i.split('_')[0]]
+                if '_' in i:
+                    state_files = [f for f in state_files if os.path.basename(f).split('_')[1] == i.split('_')[1]]
                 self.batch[i] = self.batch_generator(self.n_train[t] + self.cs, 
-                                    [f for f in train_files if os.path.basename(f).split('_')[0] == i])
+                                    [f for f in state_files])
         else:
             self.batch = self.batch_generator(self.n_train.sum() + self.cs, train_files)
 
@@ -57,15 +60,19 @@ class bern_emb_data():
         test_files = glob.glob(os.path.join(fpath,'test','*.npy'))
         self.test_data = {}
         for state in self.states:
-            self.test_data[state] = self.data_and_negative_samples(
-                                        [f for f in test_files if os.path.basename(f).split('_')[0] == state])
+            state_files = [f for f in test_files if os.path.basename(f).split('_')[0] == state.split('_')[0]]
+            if '_' in state:
+                state_files = [f for f in state_files if os.path.basename(f).split('_')[1] == state.split('_')[1]]
+            self.test_data[state] = self.data_and_negative_samples([f for f in state_files])
 
         # data generator (valid)
         valid_files = glob.glob(os.path.join(fpath,'valid','*.npy'))
         self.valid_data = {}
         for state in self.states:
-            self.valid_data[state] = self.data_and_negative_samples(
-                                         [f for f in valid_files if os.path.basename(f).split('_')[0] == state])
+            state_files = [f for f in valid_files if os.path.basename(f).split('_')[0] == state.split('_')[0]]
+            if '_' in state:
+                state_files = [f for f in state_files if os.path.basename(f).split('_')[1] == state.split('_')[1]]
+            self.valid_data[state] = self.data_and_negative_samples([f for f in state_files])
 
     def load_file(self, fn):
         with open(fn, 'r') as myfile:
